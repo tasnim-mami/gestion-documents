@@ -1,6 +1,9 @@
 
 
 import javax.swing.*;
+
+import LoginUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
@@ -159,4 +162,28 @@ public class SignUpUI extends JFrame {
 		setVisible(true);
 	}
 
+	public static String SignUpResult(String firstname, String lastname, String niv, String username, String password) {
+		String msg = "";
+		final ConnexionBD con = new ConnexionBD();
+		if (username.length() == 0 || password.length() == 0 || firstname.length() == 0 || niv.length() == 0
+				|| lastname.length() == 0) {
+			msg = "Please Fill all the Fields";
+		} else {
+
+			try {
+				String sql = "SELECT * FROM Etudiant WHERE username = '" + username + "'";
+				ResultSet res = con.instruction.executeQuery(sql);
+
+				if (res.next()) {
+					msg = "Username Used!";
+				} else {
+					msg = "Compte peut etre Créer";
+
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return msg;
+	}
 }

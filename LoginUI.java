@@ -1,11 +1,14 @@
 
 
 import javax.swing.*;
+
+import Project.ConnexionBD;
+import Project.SignUpUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 
 public class LoginUI extends JFrame {
 	private JLabel lblUsername;
@@ -70,8 +73,6 @@ public class LoginUI extends JFrame {
 					if (res.next()) {
 						System.out.println("Login successful!");
 						dispose();
-						
-						MainWindow mainWindow = new MainWindow();
 //						    MainPageFrame mainPageFrame = new MainPageFrame();
 //						    mainPageFrame.setVisible(true);
 
@@ -110,4 +111,27 @@ public class LoginUI extends JFrame {
 		// Show the UI
 		setVisible(true);
 	}
+
+	public static String LoginResult(String username, String password) {
+		final ConnexionBD con = new ConnexionBD();
+		String sql = "SELECT * FROM Etudiant WHERE username = '" + username + "' AND password = '" + password + "'";
+		ResultSet res;
+		String msg = "";
+		try {
+			res = con.instruction.executeQuery(sql);
+			if (res.next()) {
+				msg = "Login successful!";
+
+			} else {
+				msg = "Invalid username or password";
+
+			}
+		} catch (SQLException ex) {
+			System.err.println("Requete incorrecte" + sql);
+		}
+
+		return msg;
+
+	}
+
 }
